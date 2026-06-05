@@ -43,6 +43,8 @@ Durable architectural truths about this repository.
 src/
   index.ts          Re-exports `commands` array from src/commands
   logger.ts         Shared Consola logger instance
+  formatters/
+    info.ts         Output formatting functions for the info command
   commands/
     index.ts        Assembles and exports the commands array
     info.ts         `info` command – prints Node/system info

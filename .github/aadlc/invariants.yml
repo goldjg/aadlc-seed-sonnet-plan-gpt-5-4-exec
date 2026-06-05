@@ -74,3 +74,11 @@ invariants:
       are included in the published npm package (files field in package.json).
     scope: packaging
     evidence: package.json files field, tsup.config.ts
+
+  - id: INV-011
+    description: >
+      Output formatting for the `info` command is implemented in src/formatters/info.ts.
+      The `info` command handler must not import or call PicoColors functions directly;
+      it must delegate to formatInfoText or formatInfoJson.
+    scope: formatting
+    evidence: src/formatters/info.ts, src/commands/info.ts
