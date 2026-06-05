@@ -30,7 +30,13 @@ export function builder(yargs: Argv): Argv<InfoArgv> {
 }
 
 export async function handler(argv: ArgumentsCamelCase<InfoArgv>) {
-  if (argv.format === 'json') {
+  const format = argv.format ?? 'text'
+
+  if (format !== 'text' && format !== 'json') {
+    throw new Error(`Invalid value for --format: ${String(format)}. Expected one of: text, json.`)
+  }
+
+  if (format === 'json') {
     const output = {
       node: process.version,
       arch: process.arch,

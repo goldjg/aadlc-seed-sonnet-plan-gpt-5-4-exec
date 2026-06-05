@@ -60,4 +60,10 @@ describe('info command', () => {
 
     expect(parse).toThrow(/Invalid values|format/)
   })
+
+  it('rejects unsupported format values in the handler', async () => {
+    await expect(
+      handler({ _: [], $0: 'info', full: true, format: 'xml' as 'text' }),
+    ).rejects.toThrow('Invalid value for --format: xml. Expected one of: text, json.')
+  })
 })
