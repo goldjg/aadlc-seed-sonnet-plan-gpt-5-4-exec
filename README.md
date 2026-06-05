@@ -91,11 +91,15 @@ demonstrate the capabilities of the CLI application.
 ### Sample Commands
 
 - **`info`**: Prints information about the current system and Node.js configuration. This command is useful for
-  verifying the environment in which the CLI is running. Use `--format text` (default) for human-readable output or
-  `--format json` for machine-readable output.
+  verifying the environment in which the CLI is running. Use `--format text` (default) for human-readable coloured
+  output to stdout or `--format json` for single-line machine-readable JSON output. JSON output includes `node`,
+  `arch`, `cwd`, and `memoryUsage`, and includes `processConfig` when `--full` is `true`. Use `--full` / `-f`
+  (default: `true`) to include the process configuration in the output.
 - **`greeting`**: Demonstrates interactive prompts within the CLI. It's a great way to see how user inputs can be
   handled in a friendly manner.
-- **`create`**: Create new project based on `cli-typescript-starter`.
+- **`create <path>`**: Create a new project based on `cli-typescript-starter`. The target path defaults to
+  `cli-typescript-starter` when omitted. Relative paths are resolved against the current working directory, while
+  absolute paths are used as-is.
 
 All commands are located in the `src/commands/` folder. This organization makes it easy to find and modify commands or
 add new ones as needed.
