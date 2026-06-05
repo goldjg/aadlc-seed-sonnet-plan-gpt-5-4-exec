@@ -9,7 +9,7 @@ interface CreateArgv {
   path: string
 }
 
-export const command = 'create <path>'
+export const command = 'create [path]'
 export const describe = 'Create new project based on `cli-typescript-starter`.'
 export const aliases = ['c']
 

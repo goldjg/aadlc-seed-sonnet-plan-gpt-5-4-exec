@@ -5,33 +5,35 @@ It is reset at the start of each phase.
 
 ## Phase
 
-00 – Hydration
+06 – Review Hardening
 
 ## Objective
 
-Populate AADLC artefacts reflecting the repository's current state.
-No application behaviour changes.
+Perform a review-hardening pass on benchmark phases 01–05.
+Fix only confirmed correctness, documentation, validation, or contract issues.
+Record all findings and keep the diff minimal and justified.
 
 ## Deliverables
 
 | Artefact | Path | Status |
 |---|---|---|
-| Copilot instructions | `.github/copilot-instructions.md` | ✅ created |
-| Memory | `.github/aadlc/memory.md` | ✅ created |
-| Trust boundaries | `.github/aadlc/trust-boundaries.md` | ✅ created |
-| Invariants | `.github/aadlc/invariants.yml` | ✅ created |
-| PR contract | `.github/aadlc/current-pr-contract.md` | ✅ created |
+| Findings log | `.github/aadlc/plans/phase-06-findings.md` | ✅ required |
+| Targeted review fixes | repository files justified by findings | ✅ conditional |
+| PR contract | `.github/aadlc/current-pr-contract.md` | ✅ updated |
 
 ## Constraints
 
-- No modifications to `src/`, `bin/`, `package.json`, or any application file.
+- Make only minimal necessary changes.
+- No new features or opportunistic refactoring.
 - No new dependencies introduced.
-- No tests added or removed.
+- Do not modify benchmark prompts.
+- Every changed file must have a corresponding finding entry.
 
 ## Acceptance criteria
 
-- [ ] Repository understanding is documented in memory.md.
-- [ ] Trust boundaries are identified in trust-boundaries.md.
-- [ ] Invariants reflect actual repository behaviour in invariants.yml.
-- [ ] No application behaviour changes.
-- [ ] Build, lint, and tests remain green.
+- [ ] Findings are documented in `.github/aadlc/plans/phase-06-findings.md`.
+- [ ] Every finding is classified as Fixed, Accepted risk, or No action required.
+- [ ] All prior benchmark phases remain valid.
+- [ ] `pnpm compile` remains green.
+- [ ] `pnpm lint` remains green.
+- [ ] `pnpm test` remains green.
