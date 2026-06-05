@@ -31,7 +31,7 @@ describe('greeting command', () => {
 
     await handler()
 
-    const secondPromptOptions = promptSpy.mock.calls[1]?.[1]
+    const secondPromptOptions = promptSpy.mock.calls[1]?.[1] as { type?: string; options?: unknown[] } | undefined
     expect(secondPromptOptions).toMatchObject({
       type: 'select',
     })

@@ -10,6 +10,7 @@ jest.mock('giget', () => ({
 }))
 
 const downloadTemplateMock = downloadTemplate as jest.MockedFunction<typeof downloadTemplate>
+type CreateBuilderArg = Parameters<typeof builder>[0]
 
 describe('create command', () => {
   afterEach(() => {
@@ -18,19 +19,19 @@ describe('create command', () => {
   })
 
   it('joins a relative path with the current working directory', () => {
-    const argv = builder(yargs(['my-project']).exitProcess(false)).parseSync()
+    const argv = builder(yargs(['my-project']).exitProcess(false) as CreateBuilderArg).parseSync()
 
     expect(argv.path).toBe(path.join(process.cwd(), 'my-project'))
   })
 
   it('passes an absolute path through unchanged', () => {
-    const argv = builder(yargs(['/tmp/my-project']).exitProcess(false)).parseSync()
+    const argv = builder(yargs(['/tmp/my-project']).exitProcess(false) as CreateBuilderArg).parseSync()
 
     expect(argv.path).toBe('/tmp/my-project')
   })
 
   it('joins the default path with the current working directory', () => {
-    const argv = builder(yargs([]).exitProcess(false)).parseSync()
+    const argv = builder(yargs([]).exitProcess(false) as CreateBuilderArg).parseSync()
 
     expect(argv.path).toBe(path.join(process.cwd(), 'cli-typescript-starter'))
   })
@@ -71,7 +72,7 @@ describe('create command', () => {
     expect(command).toBe('create <path>')
     expect(commandDescription).toBeDefined()
     expect(aliases).toEqual(expect.any(Array))
-    expect(builder(yargs([]))).toBeDefined()
+    expect(builder(yargs([]) as CreateBuilderArg)).toBeDefined()
     expect(handler).toEqual(expect.any(Function))
   })
 })
