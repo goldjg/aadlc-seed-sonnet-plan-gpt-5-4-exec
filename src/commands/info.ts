@@ -8,6 +8,8 @@ interface InfoArgv {
   format?: 'text' | 'json'
 }
 
+const formatChoices = ['text', 'json'] as const
+
 export const command = 'info'
 export const describe = 'Basic command to display information about the CLI application.'
 export const aliases = ['i']
@@ -21,10 +23,10 @@ export function builder(yargs: Argv): Argv<InfoArgv> {
     })
     .option('format', {
       type: 'string',
-      choices: ['text', 'json'],
+      choices: formatChoices,
       default: 'text',
       describe: 'Output format',
-    })
+    }) as Argv<InfoArgv>
 }
 
 export async function handler(argv: ArgumentsCamelCase<InfoArgv>) {

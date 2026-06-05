@@ -13,7 +13,7 @@ describe('info command', () => {
     const boxSpy = jest.spyOn(logger, 'box').mockImplementation(() => logger)
     const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true)
 
-    await handler({ full: true, format: 'text' })
+    await handler({ _: [], $0: 'info', full: true, format: 'text' })
 
     expect(infoSpy).toHaveBeenCalledTimes(6)
     expect(boxSpy).toHaveBeenCalledTimes(1)
@@ -25,7 +25,7 @@ describe('info command', () => {
     const boxSpy = jest.spyOn(logger, 'box')
     const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true)
 
-    await handler({ full: true, format: 'json' })
+    await handler({ _: [], $0: 'info', full: true, format: 'json' })
 
     expect(infoSpy).not.toHaveBeenCalled()
     expect(boxSpy).not.toHaveBeenCalled()
