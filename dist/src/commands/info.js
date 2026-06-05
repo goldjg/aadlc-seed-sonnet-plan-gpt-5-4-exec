@@ -31,11 +31,10 @@ export async function handler(argv) {
         processConfig: process.config,
         argv,
     };
-    const full = argv.full === true;
     if (format === 'json') {
-        formatInfoJson(data, full);
+        formatInfoJson(data, argv.full ?? true);
         return;
     }
-    formatInfoText(data, full);
+    formatInfoText(data, argv.full ?? true);
 }
 //# sourceMappingURL=info.js.map
