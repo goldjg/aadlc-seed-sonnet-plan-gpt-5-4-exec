@@ -1,0 +1,76 @@
+---
+# AADLC Invariants
+# These rules reflect actual observed behaviour of the repository.
+# Do not add speculative or aspirational invariants.
+
+invariants:
+
+  - id: INV-001
+    description: >
+      The CLI entry point is bin/run.ts (development) and bin/run (production).
+      Both must remain the primary entry points.
+    scope: entrypoint
+    evidence: bin/run.ts, package.json bin field
+
+  - id: INV-002
+    description: >
+      All commands are exported as a single `commands` array from src/commands/index.ts
+      and iterated in bin/run.ts to register them with Yargs.
+    scope: command-registration
+    evidence: src/commands/index.ts, bin/run.ts
+
+  - id: INV-003
+    description: >
+      Every command module must export the named symbols: command, describe, aliases,
+      builder, and handler. This is the Yargs CommandModule contract.
+    scope: command-shape
+    evidence: src/commands/info.ts, src/commands/greeting.ts, src/commands/create.ts
+
+  - id: INV-004
+    description: >
+      The shared logger is the single Consola instance exported from src/logger.ts.
+      Commands must not create their own logger instances.
+    scope: logging
+    evidence: src/logger.ts, src/commands/*.ts
+
+  - id: INV-005
+    description: >
+      The test suite uses Jest with ts-jest. Tests must pass with `pnpm test`.
+    scope: testing
+    evidence: jest.config.js, package.json scripts.test
+
+  - id: INV-006
+    description: >
+      TypeScript compilation must succeed without errors (`pnpm compile`).
+      The project targets Node 20 via @tsconfig/node20.
+    scope: build
+    evidence: tsconfig.json, package.json devDependencies
+
+  - id: INV-007
+    description: >
+      Commit messages must follow Conventional Commits format.
+      commitlint is enforced via a Husky commit-msg hook.
+    scope: commits
+    evidence: commitlint.config.js, package.json scripts.commitlint
+
+  - id: INV-008
+    description: >
+      Dotenv is called once at startup in bin/run.ts before any command runs.
+      Environment configuration must not be loaded inside individual commands.
+    scope: environment
+    evidence: bin/run.ts (config() call)
+
+  - id: INV-009
+    description: >
+      The `create` command resolves relative paths against process.cwd() using
+      path.join before passing the result to giget. Absolute paths bypass this
+      coercion and are passed through unchanged.
+    scope: path-handling
+    evidence: src/commands/create.ts builder coerce
+
+  - id: INV-010
+    description: >
+      The production distributable is emitted to dist/ by TSUP. Only dist/ and bin/
+      are included in the published npm package (files field in package.json).
+    scope: packaging
+    evidence: package.json files field, tsup.config.ts
