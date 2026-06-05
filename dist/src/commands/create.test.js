@@ -14,11 +14,11 @@ describe('create command', () => {
         downloadTemplateMock.mockReset();
     });
     it('joins a relative path with the current working directory', () => {
-        const argv = builder(yargs(['my-project']).exitProcess(false)).parseSync();
+        const argv = builder(yargs(['--path', 'my-project']).exitProcess(false)).parseSync();
         expect(argv.path).toBe(path.join(process.cwd(), 'my-project'));
     });
     it('passes an absolute path through unchanged', () => {
-        const argv = builder(yargs(['/tmp/my-project']).exitProcess(false)).parseSync();
+        const argv = builder(yargs(['--path', '/tmp/my-project']).exitProcess(false)).parseSync();
         expect(argv.path).toBe('/tmp/my-project');
     });
     it('joins the default path with the current working directory', () => {
