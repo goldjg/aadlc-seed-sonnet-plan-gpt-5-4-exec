@@ -48,6 +48,40 @@ describe('info command', () => {
     )
   })
 
+  it('does not call logger.box when full is false in text format', async () => {
+    const infoSpy = jest.spyOn(logger, 'info').mockImplementation(() => logger)
+    const boxSpy = jest.spyOn(logger, 'box').mockImplementation(() => logger)
+
+    await handler({ _: [], $0: 'info', full: false, format: 'text' })
+
+    expect(infoSpy).toHaveBeenCalledTimes(6)
+    expect(boxSpy).not.toHaveBeenCalled()
+  })
+
+  it('omits processConfig from JSON output when full is false', async () => {
+    const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true)
+
+    await handler({ _: [], $0: 'info', full: false, format: 'json' })
+
+    expect(writeSpy).toHaveBeenCalledTimes(1)
+
+    const payload = JSON.parse(String(writeSpy.mock.calls[0]?.[0]))
+    expect(payload).not.toHaveProperty('processConfig')
+    expect(payload).toMatchObject({
+      node: process.version,
+      arch: process.arch,
+      cwd: process.cwd(),
+    })
+    expect(payload.memoryUsage).toEqual(
+      expect.objectContaining({
+        rss: expect.any(Number),
+        heapTotal: expect.any(Number),
+        heapUsed: expect.any(Number),
+        external: expect.any(Number),
+      }),
+    )
+  })
+
   it('rejects unsupported format values', () => {
     const parse = () =>
       builder(

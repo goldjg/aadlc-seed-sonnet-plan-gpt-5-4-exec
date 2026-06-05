@@ -45,5 +45,8 @@ describe('info command', () => {
         })).parseSync();
         expect(parse).toThrow(/Invalid values|format/);
     });
+    it('rejects unsupported format values in the handler', async () => {
+        await expect(handler({ _: [], $0: 'info', full: true, format: 'xml' })).rejects.toThrow('Invalid value for --format: xml. Expected one of: text, json.');
+    });
 });
 //# sourceMappingURL=info.test.js.map
