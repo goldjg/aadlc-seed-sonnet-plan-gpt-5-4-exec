@@ -91,7 +91,8 @@ demonstrate the capabilities of the CLI application.
 ### Sample Commands
 
 - **`info`**: Prints information about the current system and Node.js configuration. This command is useful for
-  verifying the environment in which the CLI is running.
+  verifying the environment in which the CLI is running. Use `--format text` (default) for human-readable output or
+  `--format json` for machine-readable output.
 - **`greeting`**: Demonstrates interactive prompts within the CLI. It's a great way to see how user inputs can be
   handled in a friendly manner.
 - **`create`**: Create new project based on `cli-typescript-starter`.
