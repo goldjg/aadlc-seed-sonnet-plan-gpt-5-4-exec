@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, jest } from '@jest/globals'
 import path from 'node:path'
-import yargs from 'yargs'
+import yargs, { type CommandModule } from 'yargs'
 import { downloadTemplate } from 'giget'
 import { aliases, builder, command, describe as commandDescription, handler } from './create'
 import { logger } from '../logger'
@@ -12,26 +12,44 @@ jest.mock('giget', () => ({
 const downloadTemplateMock = downloadTemplate as jest.MockedFunction<typeof downloadTemplate>
 type CreateBuilderArg = Parameters<typeof builder>[0]
 
+function parseCreateCommand(args: string[]) {
+  const commandModule: CommandModule = {
+    command,
+    describe: commandDescription,
+    aliases,
+    builder: builder as CommandModule['builder'],
+    handler: jest.fn() as CommandModule['handler'],
+  }
+
+  return yargs(args)
+    .exitProcess(false)
+    .fail((message, error) => {
+      throw error ?? new Error(message)
+    })
+    .command(commandModule)
+    .parseSync()
+}
+
 describe('create command', () => {
   afterEach(() => {
     jest.restoreAllMocks()
     downloadTemplateMock.mockReset()
   })
 
-  it('joins a relative path with the current working directory', () => {
-    const argv = builder(yargs(['--path', 'my-project']).exitProcess(false) as CreateBuilderArg).parseSync()
+  it('joins a relative positional path with the current working directory', () => {
+    const argv = parseCreateCommand(['create', 'my-project'])
 
     expect(argv.path).toBe(path.join(process.cwd(), 'my-project'))
   })
 
-  it('passes an absolute path through unchanged', () => {
-    const argv = builder(yargs(['--path', '/tmp/my-project']).exitProcess(false) as CreateBuilderArg).parseSync()
+  it('passes an absolute positional path through unchanged', () => {
+    const argv = parseCreateCommand(['create', '/tmp/my-project'])
 
     expect(argv.path).toBe('/tmp/my-project')
   })
 
-  it('joins the default path with the current working directory', () => {
-    const argv = builder(yargs([]).exitProcess(false) as CreateBuilderArg).parseSync()
+  it('uses the default path when the positional path is omitted', () => {
+    const argv = parseCreateCommand(['create'])
 
     expect(argv.path).toBe(path.join(process.cwd(), 'cli-typescript-starter'))
   })
@@ -69,7 +87,7 @@ describe('create command', () => {
   })
 
   it('exports the expected command shape', () => {
-    expect(command).toBe('create <path>')
+    expect(command).toBe('create [path]')
     expect(commandDescription).toBeDefined()
     expect(aliases).toEqual(expect.any(Array))
     expect(builder(yargs([]) as CreateBuilderArg)).toBeDefined()
