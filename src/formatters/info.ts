@@ -1,6 +1,12 @@
 import * as process from 'node:process'
+import { ArgumentsCamelCase } from 'yargs'
 import { blue, bold, gray, green, red, yellow } from 'picocolors'
 import { logger } from '../logger'
+
+interface InfoFormatterArgv {
+  full?: boolean
+  format?: 'text' | 'json'
+}
 
 export interface InfoData {
   node: string
@@ -8,7 +14,7 @@ export interface InfoData {
   cwd: string
   memoryUsage: ReturnType<typeof process.memoryUsage>
   processConfig: typeof process.config
-  argv: unknown
+  argv: ArgumentsCamelCase<InfoFormatterArgv>
 }
 
 export function formatInfoText(data: InfoData, full: boolean): void {
